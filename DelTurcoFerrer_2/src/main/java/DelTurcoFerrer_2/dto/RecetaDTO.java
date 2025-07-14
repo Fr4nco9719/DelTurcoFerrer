@@ -1,0 +1,42 @@
+package DelTurcoFerrer_2.dto;
+
+import java.util.List;
+
+public class RecetaDTO {
+    private String nombre;
+    private String descripcion;
+    private List<IngredienteDTO> ingredientes;
+    private int racionesPorPreparacion;
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public List<IngredienteDTO> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<IngredienteDTO> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
+
+	public int getRacionesPorPreparacion() {
+		return racionesPorPreparacion;
+	}
+
+	public void setRacionesPorPreparacion(int racionesPorPreparacion) {
+		this.racionesPorPreparacion = racionesPorPreparacion;
+	}
+}
