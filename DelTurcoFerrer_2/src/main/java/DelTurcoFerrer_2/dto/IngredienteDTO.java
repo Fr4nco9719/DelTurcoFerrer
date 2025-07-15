@@ -6,7 +6,7 @@ public class IngredienteDTO {
     private Long preparacionId;
     private Long ingredienteId;
     private String nombreIngrediente;
-    private int cantidadUtilizada;
+    private double cantidadUtilizada;
     private int calorias;
 
     public Long getId() {
@@ -41,11 +41,11 @@ public class IngredienteDTO {
         this.nombreIngrediente = nombreIngrediente;
     }
 
-    public int getCantidadUtilizada() {
+    public double getCantidadUtilizada() {
         return cantidadUtilizada;
     }
 
-    public void setCantidadUtilizada(int cantidadUtilizada) {
+    public void setCantidadUtilizada(double cantidadUtilizada) {
         this.cantidadUtilizada = cantidadUtilizada;
     }
 

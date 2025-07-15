@@ -27,6 +27,10 @@ public class RecetaServiceImpl implements RecetaService {
 
 	@Override
 	public Receta updateReceta(RecetaDTO recetaDTO, Long id) {
+		if (recetaDTO.getIngredientes() == null || recetaDTO.getIngredientes().isEmpty()) {
+		    throw new IllegalArgumentException("Debe ingresar al menos un ingrediente");
+		}
+
 		Receta receta = recetaRepository.findByIdAndActivaTrue(id)
 				.orElseThrow(()->new RuntimeException("Receta no encontrada"));
 		
@@ -60,7 +64,10 @@ public class RecetaServiceImpl implements RecetaService {
 		if(recetaRepository.findByNombre(recetaDTO.getNombre()).isPresent()) {
 			throw new IllegalArgumentException("Ya existe una receta con ese nombre");
 		}
-		
+		if (recetaDTO.getIngredientes() == null || recetaDTO.getIngredientes().isEmpty()) {
+		    throw new IllegalArgumentException("Debe ingresar al menos un ingrediente");
+		}
+
 		Receta receta = new Receta();
 		receta.setNombre(recetaDTO.getNombre());
 		receta.setDescripcion(recetaDTO.getDescripcion());
@@ -86,26 +93,32 @@ public class RecetaServiceImpl implements RecetaService {
 
 	@Override
 	public List<RecetaListadoDTO> getReceta(String nombre, Integer minCalorias, Integer maxCalorias) {
-		List<Receta> recetas = recetaRepository.findAll()
-		        .stream()
-		        .filter(r -> r.isActiva())
-		        .filter(r -> nombre == null || r.getNombre().toLowerCase().contains(nombre.toLowerCase()))
-		        .toList();
+	    List<Receta> recetas = recetaRepository.findAll()
+	            .stream()
+	            .filter(r -> r.isActiva())
+	            .filter(r -> nombre == null || r.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+	            .toList();
 
-		    List<RecetaListadoDTO> resultado = new ArrayList<>();
+	    List<RecetaListadoDTO> resultado = new ArrayList<>();
 
-		    for (Receta receta : recetas) {
-		        int totalCalorias = receta.getIngredientes().stream()
-		            .mapToInt(ItemReceta::getCalorias)
-		            .sum();
+	    for (Receta receta : recetas) {
+	        int totalCalorias = receta.getIngredientes().stream()
+	            .mapToInt(ItemReceta::getCalorias)
+	            .sum();
 
-		        if ((minCalorias == null || totalCalorias >= minCalorias) &&
-		            (maxCalorias == null || totalCalorias <= maxCalorias)) {
-		            
-		            resultado.add(new RecetaListadoDTO(receta.getNombre(), totalCalorias, nombre)); //*******
-		        }
-		    }
-		return resultado;
+	        if ((minCalorias == null || totalCalorias >= minCalorias) &&
+	            (maxCalorias == null || totalCalorias <= maxCalorias)) {
+	            
+
+	            resultado.add(new RecetaListadoDTO(
+	                receta.getId(),           
+	                receta.getNombre(),
+	                totalCalorias,
+	                receta.getDescripcion()
+	            ));
+	        }
+	    }
+	    return resultado;
 	}
 
 	@Override

@@ -1,11 +1,13 @@
 package DelTurcoFerrer_2.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecetaDTO {
+	private Long id;
     private String nombre;
     private String descripcion;
-    private List<IngredienteDTO> ingredientes;
+    private List<IngredienteDTO> ingredientes = new ArrayList<>();
     private int racionesPorPreparacion;
 
     public String getNombre() {
@@ -38,5 +40,13 @@ public class RecetaDTO {
 
 	public void setRacionesPorPreparacion(int racionesPorPreparacion) {
 		this.racionesPorPreparacion = racionesPorPreparacion;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

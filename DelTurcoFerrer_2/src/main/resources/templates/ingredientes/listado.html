@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Listado de Ingredientes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+    <h2>Listado de Ingredientes</h2>
+    <a th:href="@{/ingredientes/nuevo}" class="btn btn-primary mb-3">Nuevo Ingrediente</a>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Calorías por unidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ingrediente : ${ingredientes}">
+                <td th:text="${ingrediente.nombre}">Nombre</td>
+                <td th:text="${ingrediente.calorias}">Calorías</td>
+                <td>
+                    <a th:href="@{|/ingredientes/editar/${ingrediente.id}|}" class="btn btn-warning btn-sm">Editar</a>
+                    <form th:action="@{|/ingredientes/eliminar/${ingrediente.id}|}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar ingrediente?')">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(ingredientes)}">
+                <td colspan="3" class="text-center">No hay ingredientes cargados.</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/recetas" class="btn btn-secondary">Volver a recetas</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
