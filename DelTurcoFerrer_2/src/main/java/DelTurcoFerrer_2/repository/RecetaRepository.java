@@ -10,7 +10,9 @@ import java.util.Optional;
 
 public interface RecetaRepository extends JpaRepository<Receta, Long> {
     
-    Optional<Receta> findByNombre(String nombre);
+	   Optional<Receta> findByNombre(String nombre);
+	   boolean existsByNombre(String nombre);
+	   Optional<Receta> findByIdAndActivaTrue(Long id);
     
     @Query("SELECT r FROM Receta r WHERE LOWER(r.nombre) LIKE LOWER(concat('%', :nombre, '%'))")
     List<Receta> buscarPorNombreConteniendo(@Param("nombre") String nombre);

@@ -14,7 +14,7 @@ public class Receta {
 
     @NotBlank(message = "El nombre de la receta es obligatorio")
     @Size(max = 100, message = "El nombre no puede exceder los 100 caracteres")
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, unique = true)
     private String nombre;
 
     @Size(max = 500, message = "La descripción no puede exceder los 500 caracteres")
@@ -24,10 +24,17 @@ public class Receta {
     @Column(name = "raciones_por_preparacion", nullable = false)
     private int racionesPorPreparacion;
 
+    @Column(nullable = false)
+    private boolean activa = true;
+
+    @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemReceta> ingredientes = new ArrayList<>();
+
     @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Preparacion> preparaciones = new ArrayList<>();
 
-    // Getters y Setters
+    // Getters y setters
+
     public Long getId() {
         return id;
     }
@@ -54,6 +61,22 @@ public class Receta {
 
     public void setRacionesPorPreparacion(int racionesPorPreparacion) {
         this.racionesPorPreparacion = racionesPorPreparacion;
+    }
+
+    public boolean isActiva() {
+        return activa;
+    }
+
+    public void setActiva(boolean activa) {
+        this.activa = activa;
+    }
+
+    public List<ItemReceta> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<ItemReceta> ingredientes) {
+        this.ingredientes = ingredientes;
     }
 
     public List<Preparacion> getPreparaciones() {
