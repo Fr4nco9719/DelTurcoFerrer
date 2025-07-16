@@ -58,6 +58,7 @@ public class RecetaWebController {
                 .orElseThrow(() -> new RuntimeException("Receta no encontrada"));
 
         RecetaDTO dto = new RecetaDTO();
+        dto.setId(receta.getId());
         dto.setNombre(receta.getNombre());
         dto.setDescripcion(receta.getDescripcion());
         dto.setRacionesPorPreparacion(receta.getRacionesPorPreparacion());

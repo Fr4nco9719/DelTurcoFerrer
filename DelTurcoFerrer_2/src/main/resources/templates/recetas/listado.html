@@ -31,6 +31,24 @@
                 </form>
             </td>
         </tr>
+		<form method="get" action="/recetas" class="row mb-4">
+		    <div class="col-md-4">
+		        <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre"
+		               th:value="${param.nombre}" />
+		    </div>
+		    <div class="col-md-3">
+		        <input type="number" name="minCalorias" class="form-control" placeholder="Mín. calorías"
+		               th:value="${param.minCalorias}" />
+		    </div>
+		    <div class="col-md-3">
+		        <input type="number" name="maxCalorias" class="form-control" placeholder="Máx. calorías"
+		               th:value="${param.maxCalorias}" />
+		    </div>
+		    <div class="col-md-2">
+		        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+		    </div>
+		</form>
+
         </tbody>
     </table>
 </div>

@@ -3,6 +3,8 @@ package DelTurcoFerrer_2.controller;
 
 import DelTurcoFerrer_2.entities.Ingrediente;
 import DelTurcoFerrer_2.repository.IngredienteRepository;
+import DelTurcoFerrer_2.service.IngredienteService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,8 @@ public class IngredienteWebController {
 
     @Autowired
     private IngredienteRepository ingredienteRepository;
+    @Autowired
+    private IngredienteService ingredienteService;
 
     @GetMapping
     public String listarIngredientes(Model model) {
@@ -27,11 +31,18 @@ public class IngredienteWebController {
         return "ingredientes/formulario"; 
     }
 
+
     @PostMapping("/guardar")
-    public String guardarIngrediente(@ModelAttribute Ingrediente ingrediente) {
-        ingredienteRepository.save(ingrediente);
-        return "redirect:/ingredientes";
+    public String guardarIngrediente(@ModelAttribute Ingrediente ingrediente, Model model) {
+        try {
+            ingredienteService.guardar(ingrediente);
+            return "redirect:/ingredientes";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "ingredientes/formulario";
+        }
     }
+
 
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEditar(@PathVariable Long id, Model model) {

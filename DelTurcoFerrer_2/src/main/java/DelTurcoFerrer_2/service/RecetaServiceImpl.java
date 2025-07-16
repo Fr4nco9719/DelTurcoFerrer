@@ -61,34 +61,48 @@ public class RecetaServiceImpl implements RecetaService {
 
 	@Override
 	public Receta saveReceta(RecetaDTO recetaDTO) {
-		if(recetaRepository.findByNombre(recetaDTO.getNombre()).isPresent()) {
-			throw new IllegalArgumentException("Ya existe una receta con ese nombre");
-		}
-		if (recetaDTO.getIngredientes() == null || recetaDTO.getIngredientes().isEmpty()) {
-		    throw new IllegalArgumentException("Debe ingresar al menos un ingrediente");
-		}
+	    var existente = recetaRepository.findByNombre(recetaDTO.getNombre());
 
-		Receta receta = new Receta();
-		receta.setNombre(recetaDTO.getNombre());
-		receta.setDescripcion(recetaDTO.getDescripcion());
+	    if (existente.isPresent()) {
+	        if (recetaDTO.getId() == null || !existente.get().getId().equals(recetaDTO.getId())) {
+	            throw new IllegalArgumentException("Ya existe una receta con ese nombre");
+	        }
+	    }
+
+	    if (recetaDTO.getIngredientes() == null || recetaDTO.getIngredientes().isEmpty()) {
+	        throw new IllegalArgumentException("Debe ingresar al menos un ingrediente");
+	    }
+
+	    Receta receta;
+	    if (recetaDTO.getId() != null) {
+	        receta = recetaRepository.findById(recetaDTO.getId())
+	                .orElseThrow(() -> new RuntimeException("Receta no encontrada"));
+	        receta.getIngredientes().forEach(ir -> ir.setActive(false)); // desactivar anteriores
+	    } else {
+	        receta = new Receta();
+	        receta.setNombre(recetaDTO.getNombre());
+	    }
+
+	    receta.setDescripcion(recetaDTO.getDescripcion());
 	    receta.setRacionesPorPreparacion(recetaDTO.getRacionesPorPreparacion());
 
-		Set<ItemReceta> ingredientes = new HashSet<>();
-		
-		for (IngredienteDTO irDTO : recetaDTO.getIngredientes()) {
-			Ingrediente ingrediente = ingredienteRepository.findById(irDTO.getIngredienteId())
-					.orElseThrow(()-> new RuntimeException("Ingrediente no encontrado: "+irDTO.getIngredienteId()));
-			ItemReceta ir = new ItemReceta();
-			ir.setIngrediente(ingrediente);
-			ir.setCantidad(irDTO.getCantidadUtilizada());
-			ir.setCalorias(irDTO.getCalorias());
-			ir.setReceta(receta);
-			
-			ingredientes.add(ir);
-		}
-		receta.getIngredientes().addAll(ingredientes);
+	    Set<ItemReceta> ingredientes = new HashSet<>();
 
-		return recetaRepository.save(receta);
+	    for (IngredienteDTO irDTO : recetaDTO.getIngredientes()) {
+	        Ingrediente ingrediente = ingredienteRepository.findById(irDTO.getIngredienteId())
+	                .orElseThrow(() -> new RuntimeException("Ingrediente no encontrado: " + irDTO.getIngredienteId()));
+	        ItemReceta ir = new ItemReceta();
+	        ir.setIngrediente(ingrediente);
+	        ir.setCantidad(irDTO.getCantidadUtilizada());
+	        ir.setCalorias(irDTO.getCalorias());
+	        ir.setReceta(receta);
+	        ir.setActive(true);
+	        ingredientes.add(ir);
+	    }
+
+	    receta.getIngredientes().addAll(ingredientes);
+
+	    return recetaRepository.save(receta);
 	}
 
 	@Override
