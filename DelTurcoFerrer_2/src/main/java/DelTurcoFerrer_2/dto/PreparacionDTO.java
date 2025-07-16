@@ -2,6 +2,7 @@ package DelTurcoFerrer_2.dto;
 
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class PreparacionDTO {
     private Long id; // Nuevo campo ID
@@ -32,6 +33,11 @@ public class PreparacionDTO {
 
     public void setFechaCoccion(LocalDate fechaCoccion) {
         this.fechaCoccion = fechaCoccion;
+    }
+    public String getFechaCoccionFormateada() {
+        if (fechaCoccion == null) return "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return fechaCoccion.format(formatter);
     }
 
     public int getTotalRacionesPreparadas() {

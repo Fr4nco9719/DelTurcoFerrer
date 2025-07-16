@@ -21,8 +21,9 @@
             <div class="mb-3">
                 <form th:action="@{/preparaciones/buscar}" method="get" class="row g-3">
                     <div class="col-md-4">
-                        <input type="date" name="fecha" class="form-control" 
-                               th:value="${#dates.format(T(java.time.LocalDate).now(), 'yyyy-MM-dd')}">
+						<input type="date" name="fecha" class="form-control"
+						       th:value="${T(java.time.LocalDate).now()}">
+
                     </div>
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-outline-primary">
@@ -56,7 +57,7 @@
                     <tbody>
                         <tr th:each="prep : ${preparaciones}">
                             <td th:text="${prep.nombreReceta}"></td>
-                            <td th:text="${#dates.format(prep.fechaCoccion, 'dd/MM/yyyy')}"></td>
+							<span th:text="${#temporals.format(prep.fechaCoccion, 'dd/MM/yyyy')}"></span>
                             <td th:text="${prep.totalRacionesPreparadas}"></td>
                             <td>
                                 <span th:text="${prep.stockRacionesRestantes}" 

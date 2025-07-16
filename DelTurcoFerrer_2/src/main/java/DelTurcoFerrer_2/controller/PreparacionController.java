@@ -2,6 +2,8 @@ package DelTurcoFerrer_2.controller;
 
 import DelTurcoFerrer_2.dto.PreparacionDTO;
 import DelTurcoFerrer_2.service.PreparacionService;
+import DelTurcoFerrer_2.service.RecetaService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +24,13 @@ public class PreparacionController {
 
     private final PreparacionService preparacionService;
 
-    public PreparacionController(PreparacionService preparacionService) {
+    private final RecetaService recetaService;
+
+    public PreparacionController(PreparacionService preparacionService, RecetaService recetaService) {
         this.preparacionService = preparacionService;
+        this.recetaService = recetaService;
     }
+
 
     @GetMapping
     public String listarPreparaciones(Model model) {
@@ -41,13 +47,16 @@ public class PreparacionController {
     @GetMapping("/nueva")
     public String mostrarFormularioNueva(Model model) {
         model.addAttribute(ATTRIBUTE_PREPARACION, new PreparacionDTO());
+        model.addAttribute("recetas", recetaService.listarRecetas());
         return VIEW_FORMULARIO;
     }
+
 
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEdicion(@PathVariable Long id, Model model) {
         PreparacionDTO dto = preparacionService.obtenerPreparacionDTOPorId(id);
         model.addAttribute(ATTRIBUTE_PREPARACION, dto);
+        model.addAttribute("recetas", recetaService.listarRecetas());
         return VIEW_FORMULARIO;
     }
 
